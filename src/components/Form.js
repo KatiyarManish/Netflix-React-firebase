@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Validation from "../utils/Validation";
 
 const Form = () => {
   const [isopen, setisOpen] = useState(true);
+  const [errorMessage, seterrorMessage] = useState(null);
+  const email = useRef(null);
+  const password = useRef(null);
 
   const switchForm = () => {
     setisOpen(!isopen);
   };
 
+  const clickSubmit = () => {
+    const message = Validation(email.current.value, password.current.value);
+    seterrorMessage(message);
+    setTimeout(() => {
+      seterrorMessage(null);
+    }, 3000);
+  };
+
   return (
-    <form className="rounded-lg absolute mx-auto right-0 left-0 w-3/12 p-12 bg-black my-36 text-white bg-opacity-70">
+    <form
+      onSubmit={(e) => e.preventDefault()}
+      className="rounded-lg absolute mx-auto right-0 left-0 w-3/12 p-12 bg-black my-36 text-white bg-opacity-70"
+    >
       <h1 className="text-3xl py-4 font-bold">
         {isopen ? "Sign In" : "Sign up"}
       </h1>
@@ -23,15 +38,21 @@ const Form = () => {
 
       <input
         type="email"
+        ref={email}
         placeholder="Email address or Phone"
         className="p-4 my-4 w-full bg-gray-600"
       />
       <input
         type="password"
+        ref={password}
         placeholder="Password"
         className="p-4 my-4 w-full bg-gray-600"
       />
-      <button className="p-4 my-4 w-full bg-red-700 rounded-lg">
+      <p className="text-red-600 font-bold">{errorMessage}</p>
+      <button
+        className="p-4 my-4 w-full bg-red-700 rounded-lg"
+        onClick={clickSubmit}
+      >
         {isopen ? "Sign In" : "Sign up"}
       </button>
       <h2

@@ -9,6 +9,8 @@
 - Handle all other components in Body
 - Set up react-router-dom via docs. Add routing in Body
 - Build login page & signup form - REACT HOOK FORM LIBRARY
+- form validation & use ref
+-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
