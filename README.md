@@ -10,7 +10,10 @@
 - Set up react-router-dom via docs. Add routing in Body
 - Build login page & signup form - REACT HOOK FORM LIBRARY
 - form validation & use ref
--
+- firbase add for auth
+- firebase google analytics
+- firebase deploy
+  Hosting URL: https://netflix-3fea7.web.app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
