@@ -14,6 +14,9 @@
 - firebase google analytics
 - firebase deploy
   Hosting URL: https://netflix-3fea7.web.app
+- login and signup connection
+- store user object to redux store
+-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

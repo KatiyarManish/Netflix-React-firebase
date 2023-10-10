@@ -1,11 +1,17 @@
 import React, { useState, useRef } from "react";
 import Validation from "../utils/Validation";
+import { auth } from "../utils/Firebaseconfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const Form = () => {
   const [isopen, setisOpen] = useState(true);
   const [errorMessage, seterrorMessage] = useState(null);
   const email = useRef(null);
   const password = useRef(null);
+  const fullName = useRef(null);
 
   const switchForm = () => {
     setisOpen(!isopen);
@@ -17,6 +23,40 @@ const Form = () => {
     setTimeout(() => {
       seterrorMessage(null);
     }, 3000);
+
+    if (message) return;
+
+    if (!isopen) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+        });
+    }
+
+    if (isopen) {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrorMessage(errorMessage);
+        });
+    }
   };
 
   return (
@@ -30,6 +70,7 @@ const Form = () => {
 
       {!isopen && (
         <input
+          ref={fullName}
           type="text"
           placeholder="Full Name"
           className="p-4 my-4 w-full bg-gray-600"
