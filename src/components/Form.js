@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { adduser } from "../utils/userSlice";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -99,9 +98,7 @@ const Form = () => {
         placeholder="Password"
         className="p-4 my-4 w-full bg-gray-600"
       />
-      <p className={`text-${isopen ? "red" : "green"}-600 font-bold`}>
-        {errorMessage}
-      </p>
+      <p className={`text-red-600 font-bold`}>{errorMessage}</p>
       <button
         className="p-4 my-4 w-full bg-red-700 rounded-lg"
         onClick={clickSubmit}
