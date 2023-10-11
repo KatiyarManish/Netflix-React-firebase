@@ -1,12 +1,15 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Validation from "../utils/Validation";
 import { auth } from "../utils/Firebaseconfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { adduser } from "../utils/userSlice";
 
 const Form = () => {
+  const navigate = useNavigate();
   const [isopen, setisOpen] = useState(true);
   const [errorMessage, seterrorMessage] = useState(null);
   const email = useRef(null);
@@ -30,10 +33,13 @@ const Form = () => {
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
-        password.current.value
+        password.current.value,
+        fullName.current.value
       )
         .then((userCredential) => {
           const user = userCredential.user;
+
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -50,6 +56,10 @@ const Form = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          seterrorMessage("login successful");
+          setTimeout(() => {
+            navigate("/browse");
+          }, [3000]);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -89,7 +99,9 @@ const Form = () => {
         placeholder="Password"
         className="p-4 my-4 w-full bg-gray-600"
       />
-      <p className="text-red-600 font-bold">{errorMessage}</p>
+      <p className={`text-${isopen ? "red" : "green"}-600 font-bold`}>
+        {errorMessage}
+      </p>
       <button
         className="p-4 my-4 w-full bg-red-700 rounded-lg"
         onClick={clickSubmit}
