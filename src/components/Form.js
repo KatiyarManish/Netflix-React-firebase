@@ -5,10 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 
 const Form = () => {
-  const navigate = useNavigate();
   const [isopen, setisOpen] = useState(true);
   const [errorMessage, seterrorMessage] = useState(null);
   const email = useRef(null);
@@ -22,23 +20,16 @@ const Form = () => {
   const clickSubmit = () => {
     const message = Validation(email.current.value, password.current.value);
     seterrorMessage(message);
-    setTimeout(() => {
-      seterrorMessage(null);
-    }, 3000);
-
     if (message) return;
 
     if (!isopen) {
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
-        password.current.value,
-        fullName.current.value
+        password.current.value
       )
         .then((userCredential) => {
           const user = userCredential.user;
-
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -56,9 +47,6 @@ const Form = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           seterrorMessage("login successful");
-          setTimeout(() => {
-            navigate("/browse");
-          }, [3000]);
         })
         .catch((error) => {
           const errorCode = error.code;

@@ -1,21 +1,35 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import React, { useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/Firebaseconfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { adduser, removeuser } from "../utils/userSlice";
 
 const Header = () => {
   const user = useSelector((store) => {
     return store.user;
   });
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(user);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, fullName, email } = user;
+        dispatch(adduser({ uid: uid, email: email, fullName: fullName }));
+        navigate("/browse");
+      } else {
+        dispatch(removeuser());
+        navigate("/");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handlesignout = () => {
     signOut(auth)
-      .then(() => {
-        navigate("/");
-      })
+      .then(() => {})
       .catch((error) => {
         // An error happened.
       });
@@ -34,7 +48,8 @@ const Header = () => {
             className="text-white font-bold text-xl hover:text-red-500"
             onClick={handlesignout}
           >
-            Sign Out
+            <span>Welcome {user.email.split("@")[0]} </span> &nbsp; &nbsp;
+            &nbsp; &nbsp; Sign Out
           </button>
         </div>
       )}
